@@ -827,7 +827,8 @@
     const effBatch = batch * ga;
     const effDataset = images * res;
     const passesPerImage = Math.round(100 / res);
-    const rawSteps = (effDataset / effBatch) * 1.3;
+    // Correct formula: images × passes_per_image × safety_multiplier ÷ effective_batch
+    const rawSteps = (images * passesPerImage * 1.3) / effBatch;
     const recommended = Math.round(rawSteps / 100) * 100;
     const rangeMin = Math.round(recommended * 0.85 / 50) * 50;
     const rangeMax = Math.round(recommended * 1.2 / 50) * 50;
@@ -861,7 +862,7 @@
     document.getElementById('bRes').textContent = res;
     document.getElementById('bEffDataset').textContent = effDataset;
     document.getElementById('bEffBatch').textContent = effBatch;
-    document.getElementById('bFormula').textContent = `(${images} × ${res}) ÷ ${effBatch} × 1.3`;
+    document.getElementById('bFormula').textContent = `(${images} × ${passesPerImage}) × 1.3 ÷ ${effBatch}`;
     document.getElementById('bFinal').textContent = recommended.toLocaleString();
 
     // Optimizer note
